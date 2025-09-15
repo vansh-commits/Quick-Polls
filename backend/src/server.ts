@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import { createServer } from 'http';
@@ -17,7 +18,11 @@ app.use(cors({ origin: '*'}));
 app.get('/', (_req, res) => res.json({ ok: true }));
 
 // Connect to MongoDB
-const mongoUri = process.env.MONGODB_URI || 'mongodb://root:example@localhost:27017';
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+  console.error('Missing MONGODB_URI in environment');
+  process.exit(1);
+}
 mongoose.connect(mongoUri).then(async () => {
   console.log('MongoDB connected');
   // Ensure collections and indexes exist on fresh databases
