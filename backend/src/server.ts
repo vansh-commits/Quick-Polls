@@ -3,10 +3,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import { pollRouter } from './urls/polls';
+import { pollRouter } from './urls/polls.js';
 import cors from 'cors';
-import { Poll } from './models/Poll';
-import { Vote } from './models/Vote';
+import { Poll } from './models/Poll.js';
+import { Vote } from './models/Vote.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 

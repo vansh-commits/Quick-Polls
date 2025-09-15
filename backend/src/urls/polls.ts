@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import mongoose, { Types } from 'mongoose';
 import { z } from 'zod';
-import { Poll } from '../models/Poll';
-import { Vote } from '../models/Vote';
-import { io } from '../server';
+import { Poll } from '../models/Poll.js';
+import { Vote } from '../models/Vote.js';
+import { io } from '../server.js';
 
 export const pollRouter = Router();
 
