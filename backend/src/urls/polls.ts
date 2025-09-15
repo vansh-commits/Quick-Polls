@@ -56,7 +56,8 @@ pollRouter.post('/:id/vote', async (req, res) => {
   await poll.save();
 
   const payload = {
-    id: (poll._id as Types.ObjectId).toString(),
+    id: (poll._id as Types.ObjectId)
+    .toString(),
     question: poll.question,
     options: poll.options.map((o) => ({ text: o.text, votes: o.votes }))
   };

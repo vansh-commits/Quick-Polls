@@ -6,6 +6,8 @@ import { pollRouter } from './urls/polls';
 import cors from 'cors';
 import { Poll } from './models/Poll';
 import { Vote } from './models/Vote';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
 
 const app = express();
 app.use(express.json());
@@ -35,6 +37,99 @@ mongoose.connect(mongoUri).then(async () => {
 
 // Mount REST API
 app.use('/polls', pollRouter);
+
+// OpenAPI/Swagger
+const swaggerSpec = swaggerJsdoc({
+  definition: {
+    openapi: '3.0.0',
+    info: { title: 'QuickPolls API', version: '1.0.0' },
+    servers: [{ url: `http://localhost:${process.env.PORT || 8080}` }],
+    components: {
+      schemas: {
+        CreatePollRequest: {
+          type: 'object',
+          required: ['question', 'options'],
+          properties: {
+            question: { type: 'string' },
+            options: { type: 'array', items: { type: 'string' }, minItems: 2 }
+          }
+        },
+        VoteRequest: {
+          type: 'object',
+          required: ['optionIndex'],
+          properties: { optionIndex: { type: 'integer', minimum: 0 } }
+        },
+        PollOption: {
+          type: 'object',
+          properties: { text: { type: 'string' }, votes: { type: 'number' } }
+        },
+        Poll: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            question: { type: 'string' },
+            options: { type: 'array', items: { $ref: '#/components/schemas/PollOption' } }
+          }
+        }
+      }
+    },
+    paths: {
+      '/polls': {
+        get: {
+          summary: 'List polls',
+          responses: {
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': {
+                  schema: { type: 'array', items: { $ref: '#/components/schemas/Poll' } }
+                }
+              }
+            }
+          }
+        },
+        post: {
+          summary: 'Create poll',
+          requestBody: {
+            required: true,
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/CreatePollRequest' } } }
+          },
+          responses: {
+            200: { description: 'Created', content: { 'application/json': { schema: { $ref: '#/components/schemas/Poll' } } } },
+            400: { description: 'Invalid payload' }
+          }
+        }
+      },
+      '/polls/{id}': {
+        get: {
+          summary: 'Get poll by id',
+          parameters: [ { name: 'id', in: 'path', required: true, schema: { type: 'string' } } ],
+          responses: {
+            200: { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Poll' } } } },
+            404: { description: 'Not found' }
+          }
+        }
+      },
+      '/polls/{id}/vote': {
+        post: {
+          summary: 'Vote on a poll',
+          parameters: [ { name: 'id', in: 'path', required: true, schema: { type: 'string' } } ],
+          requestBody: {
+            required: true,
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/VoteRequest' } } }
+          },
+          responses: {
+            200: { description: 'OK', content: { 'application/json': { schema: { $ref: '#/components/schemas/Poll' } } } },
+            400: { description: 'Invalid payload' },
+            404: { description: 'Not found' }
+          }
+        }
+      }
+    }
+  },
+  apis: []
+});
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Create HTTP server and attach Socket.io
 const nodeServer = createServer(app);
