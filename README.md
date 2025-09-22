@@ -19,7 +19,6 @@ A real-time polling app where users can create polls, vote, and see live results
 
 Backend `.env` example:
 ```
-
 MONGODB_URI=mongodb://127.0.0.1:27017/quickpolls
 PORT=8080
 ```
