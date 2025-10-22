@@ -157,7 +157,7 @@ Quick-Polls/
 - `GET /health` - Backend health check
 
 ### Documentation
-- `GET /docs` - OpenAPI/Swagger documentation
+- `GET /docs` - OpenAPI/Swagger documentation (https://quick-polls.onrender.com/docs/)
 
 ## 🎨 Design System
 
