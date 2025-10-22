@@ -25,7 +25,7 @@ authRouter.post('/signup', async (req, res) => {
   if (existing) return res.status(400).json({ error: 'Email already in use' });
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await User.create({ email, passwordHash });
-  const token = jwt.sign({ sub: user._id.toString(), email }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '30d' });
+  const token = jwt.sign({ sub: (user as any)._id.toString(), email }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '30d' });
   return res.json({ token });
 });
 
@@ -44,7 +44,7 @@ authRouter.post('/login', async (req, res) => {
   if (!user) return res.status(400).json({ error: 'Invalid credentials' });
   const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) return res.status(400).json({ error: 'Invalid credentials' });
-  const token = jwt.sign({ sub: user._id.toString(), email }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '30d' });
+  const token = jwt.sign({ sub: (user as any)._id.toString(), email }, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '30d' });
   return res.json({ token });
 });
 
