@@ -9,13 +9,18 @@ import { Poll } from './models/Poll.js';
 import { Vote } from './models/Vote.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import { authRouter } from './urls/auth.js';
+import { userRouter } from './urls/user.js';
 
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: '*'}));
 
-// Basic health check
-app.get('/', (_req, res) => res.json({ ok: true }));
+// Basic health check and readiness
+app.get('/health', async (_req, res) => {
+  const dbReady = mongoose.connection.readyState === 1;
+  res.json({ ok: true, dbReady });
+});
 
 // Connect to MongoDB
 const mongoUri = process.env.MONGODB_URI;
@@ -41,6 +46,8 @@ mongoose.connect(mongoUri).then(async () => {
 });
 
 // Mount REST API
+app.use('/auth', authRouter);
+app.use('/', userRouter);
 app.use('/polls', pollRouter);
 
 // OpenAPI/Swagger

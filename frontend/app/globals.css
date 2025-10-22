@@ -9,3 +9,98 @@
   animation: fade-in-up 0.4s ease-out forwards;
 }
 
+/* Black and white theme */
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: #000000;
+  color: #ffffff;
+}
+
+.card {
+  background: #111111;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.btn-primary {
+  background: #ffffff;
+  color: #000000;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: #f0f0f0;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid #333333;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: #111111;
+  border-color: #555555;
+}
+
+.muted { color: #888888; }
+
+.glass-border { border: 1px solid #333333; }
+
+/* Progress bar styling */
+.bg-blue-500 {
+  background: #ffffff !important;
+}
+
+/* Link colors */
+.text-blue-400 {
+  color: #ffffff !important;
+}
+
+.text-red-400 {
+  color: #ff4444 !important;
+}
+
+/* Responsive improvements */
+@media (max-width: 640px) {
+  .btn-primary, .btn-secondary {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .card {
+    padding: 12px;
+    margin: 8px;
+  }
+  
+  input, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Ensure proper spacing on mobile */
+@media (max-width: 768px) {
+  .mx-auto {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}
+
